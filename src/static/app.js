@@ -4,6 +4,29 @@ document.addEventListener("DOMContentLoaded", () => {
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
 
+  // Função para criar a lista de participantes (participant list)
+  function createParticipantList(participants) {
+    // Comentário: Renderizando participant list
+    if (participants.length) {
+      return `
+        <div class="participants-list-container">
+          <p class="participant">Informações dos participant abaixo:</p>
+          <strong>Lista de Participants:</strong>
+          <ul class="participants-list">
+            ${participants.map(participant => `
+              <li class="participant">
+                <span class="participant-icon">👤</span>
+                <span class="participant-name">${participant}</span>
+              </li>
+            `).join("")}
+          </ul>
+        </div>
+      `;
+    } else {
+      return `<p class="participant"><strong>Lista de Participants:</strong> Nenhum participant ainda.</p>`;
+    }
+  }
+
   // Function to fetch activities from API
   async function fetchActivities() {
     try {
@@ -20,22 +43,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const spotsLeft = details.max_participants - details.participants.length;
 
-        // Melhora o layout da lista de participantes
-        const participantsList = details.participants.length
-          ? `
-            <div class="participants-list-container">
-              <strong>Lista de Participantes:</strong>
-              <ul class="participants-list">
-                ${details.participants.map(participant => `
-                  <li>
-                    <span class="participant-icon">👤</span>
-                    <span class="participant-name">${participant}</span>
-                  </li>
-                `).join("")}
-              </ul>
-            </div>
-          `
-          : "<p><strong>Lista de Participantes:</strong> Nenhum participante ainda.</p>";
+        // participant list layout melhorado
+        const participantsList = createParticipantList(details.participants);
 
         activityCard.innerHTML = `
           <h4>${name}</h4>
